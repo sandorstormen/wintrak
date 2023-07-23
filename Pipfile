@@ -9,6 +9,7 @@ pandas = "*"
 mpi4py = "*"
 matplotlib = "*"
 seaborn = "*"
+multiprocessing = "*"
 
 [dev-packages]
 ipython = "*"
