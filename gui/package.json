@@ -1,0 +1,20 @@
+{
+  "name": "gui",
+  "version": "1.0.0",
+  "description": "GUI for WinTrak",
+  "main": "main.js",
+  "author": "Sandor Berglund",
+  "license": "MIT",
+  "private": null,
+  "devDependencies": {
+    "electron": "^25.3.1"
+  },
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "d3": "^7.8.5",
+    "eel": "^0.1.1",
+    "papaparse": "^5.4.1"
+  }
+}

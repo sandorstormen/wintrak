@@ -35,7 +35,7 @@ class ProgramTimer(Thread):
 
 class Saver(Thread):
 
-    def __init__(self, authkey: Optional[bytes] = None, data_path: Path = "data.csv") -> None:
+    def __init__(self, authkey: Optional[bytes] = None, data_path: Path = Path("data.csv")) -> None:
         super().__init__()
         self.receiver = Receiver(port=PortMap.FRONTEND, authkey=authkey)
 

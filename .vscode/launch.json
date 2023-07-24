@@ -5,6 +5,24 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "eel",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/gui/graphing.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Electron Main",
+            "program": "${workspaceFolder}/gui/main.js",
+            "request": "launch",
+            "runtimeExecutable": "electron",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
             "name": "Run All",
             "type": "python",
             "request": "launch",

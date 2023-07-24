@@ -6,10 +6,9 @@ name = "pypi"
 [packages]
 Xlib = "*"
 pandas = "*"
-mpi4py = "*"
 matplotlib = "*"
 seaborn = "*"
-multiprocessing = "*"
+eel = "*"
 
 [dev-packages]
 ipython = "*"
@@ -18,6 +17,3 @@ black = "*"
 
 [requires]
 python_version = "3.11"
-
-[pipenv]
-allow_prereleases = true
