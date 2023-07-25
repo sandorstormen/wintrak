@@ -1,16 +1,116 @@
+:root{
+  --BackgroundAlternate: #31363b;
+  --BackgroundNormal: #282e33;
+  --DecorationFocus: #00897b;
+  --DecorationHover: #009886;
+  --ForegroundActive: #3daee9;
+  --ForegroundInactive: #c2c2c2;
+  --ForegroundLink: #1d99f3;
+  --ForegroundNegative: #da4453;
+  --ForegroundNeutral: #f67400;
+  --ForegroundNormal: #dedede;
+  --ForegroundPositive: #27ae60;
+  --ForegroundVisited: #9b59b6;
+
+  --BackgroundColor: #303030;
+  --BackgroundFaintColor: #505050;
+  --BackgroundIntenseColor: #101010;
+  --Color0Color: #b3b3b3;
+  --Color0FaintColor: #b3b3b3;
+  --Color0IntenseColor: #b3b3b3;
+  --Color1Color: #b33030;
+  --Color1FaintColor: #b33030;
+  --Color1IntenseColor: #b33030;
+  --Color2Color: #30b330;
+  --Color2FaintColor: #30b330;
+  --Color2IntenseColor: #30b330;
+  --Color3Color: #b3b330;
+  --Color3FaintColor: #b3b330;
+  --Color3IntenseColor: #b3b330;
+  --Color4Color: #5050b5;
+  --Color4FaintColor: #5050b5;
+  --Color4IntenseColor: #5050b5;
+  --Color5Color: #b330b3;
+  --Color5FaintColor: #b330b3;
+  --Color5IntenseColor: #b330b3;
+  --Color6Color: #30b3b3;
+  --Color6FaintColor: #30b3b3;
+  --Color6IntenseColor: #30b3b3;
+  --Color7Color: #fcfcfc;
+  --Color7FaintColor: #fcfcfc;
+  --Color7IntenseColor: #fcfcfc;
+  --ForegroundColor: 252,252,252;
+  --ForegroundFaintColor: 239,240,241;
+  --ForegroundIntenseColor: 255,255,255;
+}
+
+/* Background & Layout Style */
 body {
-    background-color: #f5f5f5;
+    background-color: var(--BackgroundAlternate);
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 1.42857143;
-    color: #333;
+    color: var(--Color0Color);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     margin: 0;
 }
 
-body > div {
-    flex: 1;
-    
+#header-box{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
+
+body > *:first-child {
+  margin-top: 0;
+}
+
+/* Header Style */
+#title {
+    font-size: 175%;
+    line-height: 1.1;
+    background-color: var(--BackgroundColor);
+    padding: .3em;
+}
+
+.subheader {
+    font-size: 125%;
+    line-height: 1.1;
+    padding: .1em;
+    border-bottom: .2em solid;
+    border-color: var(--BackgroundNormal);
+}
+
+/* TreeMap Style */
+#tree {
+  height: auto;
+  padding-bottom: 30%;
+}
+#tree rect {
+  fill: var(--DecorationFocus);
+  stroke: #000;
+  transition: 0.5s;
+}
+#tree rect:hover {
+  fill: var(--DecorationHover);
+}
+
+/* Responsive SVG Style */
+svg {
+    height: auto;
+    padding: auto;
+}
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
+  }
+  .svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+  }

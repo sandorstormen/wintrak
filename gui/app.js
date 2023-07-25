@@ -1,5 +1,6 @@
-title = document.querySelector("h1")
-title.innerText = "xasdasdsadsa"
+const svgMargin = { top: 10, right: 10, bottom: 10, left: 10 },
+treeWidth = 500 - svgMargin.left - svgMargin.right,
+treeHeight = 200 - svgMargin.top - svgMargin.bottom;
 
 function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -14,6 +15,7 @@ async function read_data(path) {
 
 function calc_data(dsv) {
     program_agg = {};
+    total_time = 0;
 
     dsv.forEach(row => {
         if (!row.ProcessName) {
@@ -32,17 +34,14 @@ function calc_data(dsv) {
             program_agg[row.ProcessName] = 0;
         }
         program_agg[row.ProcessName] += row.DeltaTime;
+        total_time += row.DeltaTime;
     });
     dsv.columns.push("DeltaTime");
 
-    return { "dsv": dsv, "program_agg": program_agg };
+    return { "dsv": dsv, "program_agg": program_agg, "total_time": total_time };
 }
 
-function drawTreeMap(data) {
-    const margin = { top: 10, right: 10, bottom: 10, left: 10 },
-        width = 500 - margin.left - margin.right,
-        height = 200 - margin.top - margin.bottom;
-
+function drawTreeMap(data, svg) {
     total_time = Object.values(data).reduce((a, b) => a + b, 0);
     Object.entries(data).forEach(row => {
         percentage = row[1] / total_time;
@@ -50,15 +49,6 @@ function drawTreeMap(data) {
             delete data[row[0]];
         }
     });
-
-    // append the svg object to the body of the page
-    const svg = d3.select("#tree")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform",
-            `translate(${margin.left}, ${margin.top})`);
 
     var ready_data = [{ name: 'Origin', parent: '', value: '' }]
     Object.entries(data).forEach(([key, value]) => {
@@ -73,7 +63,7 @@ function drawTreeMap(data) {
     // Then d3.treemap computes the position of each element of the hierarchy
     // The coordinates are added to the root object above
     d3.treemap()
-        .size([width, height])
+        .size([treeWidth, treeHeight])
         .padding(4)
         (root)
 
@@ -86,8 +76,6 @@ function drawTreeMap(data) {
         .attr('y', function (d) { return d.y0; })
         .attr('width', function (d) { return d.x1 - d.x0; })
         .attr('height', function (d) { return d.y1 - d.y0; })
-        .style("stroke", "black")
-        .style("fill", "#69b3a2");
 
     // and to add the text labels
     svg
@@ -97,15 +85,48 @@ function drawTreeMap(data) {
         .attr("x", function (d) { return d.x0 + 10 })    // +10 to adjust position (more right)
         .attr("y", function (d) { return d.y0 + 20 })    // +20 to adjust position (lower)
         .text(function (d) { return d.data.name })
-        .attr("font-size", "15px")
-        .attr("fill", "white")
+        .attr("transform", function (d) {
+            d.w = this.getComputedTextLength();
+            if (d.x0 + d.w >= d.x1 - 4) {
+                return "rotate(90 " + (d.x0 + 10) + " " + (d.y0 + 20) + ")";
+            }
+            return "";
+        })
+        .style("opacity", function (d) {
+            d.w = this.getComputedTextLength();
+            d.h = 20;
+            return d.w < d.x1 - d.x0 && d.h < d.y1 - d.y0 ? 1 : 0;
+        })
 }
+
+const divTreeMap = d3
+    .select("#tree")
+const svgTreeMap = divTreeMap
+    .append("svg")
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", `0 0 ${treeWidth} ${treeHeight}`)
+    .classed("svg-content-responsive", true)
+
+
+d3.select(window).on("resize", function () {
+    var newWidth = d3.selectAll("svg").style("width");
+    // 600 px as in viewBox width
+    const newFontSize = 15 * (600 / parseInt(newWidth));
+    d3.selectAll("svg>text")
+        .style("font-size", newFontSize)
+});
 
 read_data("../../data.csv")
     .then(dsv => calc_data(dsv))
     .then(res => {
         dsv = res.dsv;
         program_agg = res.program_agg;
-        drawTreeMap(program_agg)
+        drawTreeMap(program_agg, svgTreeMap)
+        console.log(res.total_time);
+
+        // Total time
+        document.onload = function () {
+            document.getElementById("total_time").innerHTML = res.total_time.toString();
+        }
     });
 
