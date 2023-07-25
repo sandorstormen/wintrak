@@ -1,9 +1,20 @@
 const svgMargin = { top: 10, right: 10, bottom: 10, left: 10 },
-treeWidth = 500 - svgMargin.left - svgMargin.right,
-treeHeight = 200 - svgMargin.top - svgMargin.bottom;
+    treeWidth = 500 - svgMargin.left - svgMargin.right,
+    treeHeight = 200 - svgMargin.top - svgMargin.bottom;
 
 function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function secondsToHMS(seconds) {
+    date = new Date(0);
+    date.setSeconds(seconds);
+    time_string = date.toISOString()
+        .split("T")[1]
+        .split("Z")[0]
+        .replace(/(00:)*/, "")
+        .replace(/\.0*/, "");
+    return time_string;
 }
 
 async function read_data(path) {
@@ -25,7 +36,7 @@ function calc_data(dsv) {
         row.ProcessName = capitalize(row.ProcessName);
         row.StartTime = new Date(row.StartTime);
         row.EndTime = new Date(row.EndTime);
-        row.DeltaTime = row.EndTime - row.StartTime;
+        row.DeltaTime = (row.EndTime - row.StartTime) / 1000;
 
         if (isNaN(row.DeltaTime)) {
             return;
@@ -38,7 +49,7 @@ function calc_data(dsv) {
     });
     dsv.columns.push("DeltaTime");
 
-    return { "dsv": dsv, "program_agg": program_agg, "total_time": total_time };
+    return { "dsv": dsv, "program_agg": program_agg, "total_seconds": total_time };
 }
 
 function drawTreeMap(data, svg) {
@@ -94,8 +105,10 @@ function drawTreeMap(data, svg) {
         })
         .style("opacity", function (d) {
             d.w = this.getComputedTextLength();
-            d.h = 20;
-            return d.w < d.x1 - d.x0 && d.h < d.y1 - d.y0 ? 1 : 0;
+            if (d.x0 + d.w >= d.x1 && d.y0 + d.w >= d.x1) {
+                return 0;
+            }
+            return 1;
         })
 }
 
@@ -122,11 +135,23 @@ read_data("../../data.csv")
         dsv = res.dsv;
         program_agg = res.program_agg;
         drawTreeMap(program_agg, svgTreeMap)
-        console.log(res.total_time);
 
-        // Total time
-        document.onload = function () {
-            document.getElementById("total_time").innerHTML = res.total_time.toString();
-        }
+        total_time_elem = document.getElementById("total-time")
+
+        total_time_elem.innerHTML = secondsToHMS(res.total_seconds);
+
+        uls = document.querySelectorAll("#top-programs>ul")
+        var name_ul, time_ul = uls;
+        Object.entries(program_agg).sort((a, b) => b[1] - a[1]).slice(0, 5).forEach(([key, value]) => {
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(key));
+            name_ul.appendChild(li);
+
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(secondsToHMS(value)));
+            time_ul.appendChild(li);
+        });
+
+        top_windows_ul = document.getElementById("top-windows");
     });
 

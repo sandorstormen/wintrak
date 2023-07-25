@@ -67,6 +67,15 @@ body > *:first-child {
   margin-top: 0;
 }
 
+.time-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
 /* Header Style */
 #title {
     font-size: 175%;
@@ -79,6 +88,9 @@ body > *:first-child {
     font-size: 125%;
     line-height: 1.1;
     padding: .1em;
+}
+
+.bottom-border {
     border-bottom: .2em solid;
     border-color: var(--BackgroundNormal);
 }
