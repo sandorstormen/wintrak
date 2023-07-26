@@ -5,7 +5,7 @@ from signal import signal, SIGTERM, SIGINT
 
 
 class PortMap(IntEnum):
-    TIMER = 6000
+    TIMER = 6002
     FRONTEND = 6001
 
 

@@ -128,8 +128,7 @@ d3.select(window).on("resize", function () {
     d3.selectAll("svg>text")
         .style("font-size", newFontSize)
 });
-
-read_data("../../data.csv")
+read_data("/home/sandor/.local/share/WinTrak/data.csv")
     .then(dsv => calc_data(dsv))
     .then(res => {
         dsv = res.dsv;
@@ -141,7 +140,8 @@ read_data("../../data.csv")
         total_time_elem.innerHTML = secondsToHMS(res.total_seconds);
 
         uls = document.querySelectorAll("#top-programs>ul")
-        var name_ul, time_ul = uls;
+        var name_ul = uls[0];
+        var time_ul = uls[1];
         Object.entries(program_agg).sort((a, b) => b[1] - a[1]).slice(0, 5).forEach(([key, value]) => {
             var li = document.createElement("li");
             li.appendChild(document.createTextNode(key));
