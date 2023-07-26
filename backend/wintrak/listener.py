@@ -11,7 +11,7 @@ from threading import Thread
 from datetime import datetime
 import psutil
 
-from utils import PortMap, Sender
+from wintrak.utils import PortMap, Sender
 
 
 class WindowListener(Thread):

@@ -13,7 +13,7 @@ from Xlib.xobject.drawable import Window
 from Xlib.protocol.rq import Event
 
 from threading import Lock, Thread
-from utils import PortMap, Sender, Receiver
+from wintrak.utils import PortMap, Sender, Receiver
 
 
 class ProgramTimer(Thread):

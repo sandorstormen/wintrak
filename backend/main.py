@@ -1,5 +1,5 @@
-from listener import WindowListener
-from timer import ProgramTimer
+from wintrak.listener import WindowListener
+from wintrak.timer import ProgramTimer
 
 timer_proc = ProgramTimer()
 listener_proc = WindowListener()
