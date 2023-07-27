@@ -5,16 +5,15 @@ name = "pypi"
 
 [packages]
 Xlib = "*"
-pandas = "*"
-matplotlib = "*"
-seaborn = "*"
-eel = "*"
 
 [dev-packages]
 ipython = "*"
 jupyter = "*"
 black = "*"
 tox = "*"
+pandas = "*"
+matplotlib = "*"
+seaborn = "*"
 
 [requires]
 python_version = "3.11"

@@ -1,25 +1,18 @@
-from collections import defaultdict
-from collections.abc import Callable, Iterable, Mapping
-from datetime import datetime
-from multiprocessing.pool import ThreadPool
-import os
-from pathlib import Path
-from typing import Any, Dict, Optional, Union
-import Xlib
-from Xlib import X
-from Xlib.display import Display
-from Xlib.error import XError
-from Xlib.xobject.drawable import Window
-from Xlib.protocol.rq import Event
+from __future__ import annotations
 
-from threading import Lock, Thread
-from wintrak.utils import PortMap, Sender, Receiver
+from datetime import datetime
+from pathlib import Path
+from threading import Lock
+from threading import Thread
+
+from wintrak.utils import PortMap
+from wintrak.utils import Receiver
 
 
 class ProgramTimer(Thread):
-    def __init__(self, authkey: Optional[bytes] = None) -> None:
+    def __init__(self, authkey: bytes | None = None) -> None:
         super().__init__()
-        self.receiver = Receiver(port=PortMap.TIMER, authkey=authkey)
+        self.receiver = Receiver(port=int(PortMap.TIMER), authkey=authkey)
         self.saver = Saver()
 
     def run(self) -> None:
@@ -43,7 +36,10 @@ class ProgramTimer(Thread):
 
 class Saver:
     def __init__(
-        self, data_path: Path = Path("~") / ".local" / "share" / "WinTrak" / "data.csv"
+        self,
+        data_path: Path = (
+            Path("~") / ".local" / "share" / "WinTrak" / "data.csv"
+        ),
     ) -> None:
         super().__init__()
 
@@ -51,13 +47,15 @@ class Saver:
         data_path.parent.mkdir(parents=True, exist_ok=True)
         if not data_path.exists():
             self.file_handle = open(data_path, "w")
-            self.file_handle.write("WindowTitle,ProcessName,StartTime,EndTime\n")
+            self.file_handle.write(
+                "WindowTitle,ProcessName,StartTime,EndTime\n",
+            )
             self.file_handle.flush()
             self.file_handle.close()
 
         self.lock = Lock()
 
-    def save(self, record: Dict[str, str | datetime]) -> None:
+    def save(self, record: dict[str, str | datetime]) -> None:
         thread = SaveThread(self.lock, record)
         thread.start()
         return
@@ -67,8 +65,12 @@ class SaveThread(Thread):
     def __init__(
         self,
         lock: Lock,
-        record: Dict[str, str | datetime],
-        data_path: Path = Path("~") / ".local" / "share" / "WinTrak" / "data.csv",
+        record: dict[str, str | datetime],
+        data_path: Path = Path("~")
+        / ".local"
+        / "share"
+        / "WinTrak"
+        / "data.csv",
     ) -> None:
         super().__init__()
 
@@ -77,7 +79,9 @@ class SaveThread(Thread):
         self.data_path = data_path.expanduser()
 
     def run(self) -> None:
-        csv_string = ",".join([str(x).replace(",", "") for x in self.record.values()])
+        csv_string = ",".join(
+            [str(x).replace(",", "") for x in self.record.values()],
+        )
         with self.lock:
             with open(self.data_path, "a") as file_handle:
                 file_handle.write(csv_string + "\n")
