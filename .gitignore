@@ -162,9 +162,10 @@ cython_debug/
 # Temp data files
 *.csv
 
+# Build Artifacts
+dist/
+*.egg-info/
+*.egg
+
 # Yarn
-#  It is recommended to not store the yarn.lock file in version control.
-#  Install dependencies with the following command instead:
-#    yarn install --frozen-lockfile
-yarn.lock
 node_modules/

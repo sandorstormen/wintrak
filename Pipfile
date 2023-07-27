@@ -14,6 +14,7 @@ eel = "*"
 ipython = "*"
 jupyter = "*"
 black = "*"
+tox = "*"
 
 [requires]
 python_version = "3.11"
