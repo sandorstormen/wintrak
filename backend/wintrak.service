@@ -5,7 +5,8 @@ Conflicts=getty@tty1.service
  
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /usr/bin/myscript.py
+Environment=PYTHONPATH=/usr/lib/wintrak
+ExecStart=/usr/bin/python3 -m import wintrak; wintrak.run()
 StandardInput=tty-force
  
 [Install]

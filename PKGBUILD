@@ -8,7 +8,7 @@
 
 # Maintainer: Sandor Berglund <sandor.berglund@gmail.com>
 pkgname=wintrak-git # '-bzr', '-git', '-hg' or '-svn'
-pkgver="0.0.1"
+pkgver=r12.2b693ff
 pkgrel=1
 _desc="The real time tracker"
 pkgdesc="The real time tracker"
@@ -26,7 +26,7 @@ conflicts=("${pkgname%-git}")
 # install=
 source=('git+https://github.com/sandorstormen/wintrak.git')
 noextract=()
-md5sums=('5f4fcfdec864255d8d9662900e0fa4c9' '1f4f72c6544f68045faa4b2238005a0d')
+md5sums=('SKIP')
 
 # Please refer to the 'USING VCS SOURCES' section of the PKGBUILD man page for
 # a description of each element in the source array.
@@ -47,24 +47,26 @@ pkgver() {
 	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
-# prepare() {
-# 	cd "$srcdir/${pkgname%-VCS}"
-# 	patch -p1 -i "$srcdir/${pkgname%-VCS}.patch"
-# }
+prepare() {
+	git init wintrak
+	# cd wintrak
+}
 
 build() {
-	cd "$srcdir/${pkgname%-VCS}"
+	cd wintrak
 	# ./autogen.sh
 	# ./configure --prefix=/usr
-	make
+	# make
 }
 
 check() {
-	cd "$srcdir/${pkgname%-VCS}"
-	make -k check
+	cd wintrak
+	# make -k check
 }
 
 package() {
-	cd "$srcdir/${pkgname%-VCS}"
-	make DESTDIR="$pkgdir/" install
+	cd wintrak
+	install -dm755 "$pkgdir/usr/lib/wintrak"
+	install -dm644 "$srcdir/backend/wintrak" "$pkgdir/usr/lib/wintrak"
+	install -m644 "$srcdir/backend/wintrak.service" "$pkgdir/etc/systemd/user"
 }
