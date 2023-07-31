@@ -8,7 +8,7 @@
 
 # Maintainer: Sandor Berglund <sandor.berglund@gmail.com>
 pkgname=wintrak-git # '-bzr', '-git', '-hg' or '-svn'
-pkgver=r12.2b693ff
+pkgver=r13.30983f9
 pkgrel=1
 _desc="The real time tracker"
 pkgdesc="The real time tracker"
@@ -48,25 +48,30 @@ pkgver() {
 }
 
 prepare() {
-	git init wintrak
-	# cd wintrak
+	cd "${pkgname%-git}"
+	git submodule init
+	git -c protocol.file.allow=always submodule update
 }
 
 build() {
-	cd wintrak
-	# ./autogen.sh
-	# ./configure --prefix=/usr
-	# make
+	cd "${pkgname%-git}/gui"
+	
+	yarn install
+	yarn add --dev @electron-forge/cli
+	npx electron-forge import
+
+	yarn make
 }
 
-check() {
-	cd wintrak
-	# make -k check
-}
+# check() {
+# 	cd wintrak
+# 	# make -k check
+# }
 
 package() {
 	cd wintrak
+	# cd "$srcdir"
 	install -dm755 "$pkgdir/usr/lib/wintrak"
-	install -dm644 "$srcdir/backend/wintrak" "$pkgdir/usr/lib/wintrak"
-	install -m644 "$srcdir/backend/wintrak.service" "$pkgdir/etc/systemd/user"
+	install -dm755 "$srcdir/backend/wintrak" "$pkgdir/usr/lib/wintrak"
+	# install -m644 "$srcdir/backend/wintrak.service" "$pkgdir/etc/systemd/user"
 }
