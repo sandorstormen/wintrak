@@ -7,15 +7,19 @@ const initPath = path.join(app.getPath('userData'), "init.json");
 function createWindow() {
   try {
     data = JSON.parse(fs.readFileSync(initPath, 'utf8'));
+    if (data && data.bounds) {
+      width = data.bounds.width;
+      height = data.bounds.height;
+      x = data.bounds.x;
+      y = data.bounds.y;
+    }
   }
   catch (e) {
-  }
-
-  if (data && data.bounds) {
-    width = data.bounds.width;
-    height = data.bounds.height;
-    x = data.bounds.x;
-    y = data.bounds.y;
+    console.log("No init file found, using defaults");
+    width = 800;
+    height = 600;
+    x = 0;
+    y = 0;
   }
 
   const win = new BrowserWindow({
