@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "Electron Main",
-            "program": "${workspaceFolder}/gui/main.js",
+            "program": "${workspaceFolder}/frontend/main.js",
             "request": "launch",
             "runtimeExecutable": "electron",
             "skipFiles": [

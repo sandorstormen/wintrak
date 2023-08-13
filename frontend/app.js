@@ -2,6 +2,8 @@ const svgMargin = { top: 10, right: 10, bottom: 10, left: 10 },
     treeWidth = 500 - svgMargin.left - svgMargin.right,
     treeHeight = 200 - svgMargin.top - svgMargin.bottom;
 
+const query_params = new URLSearchParams(window.location.search)
+
 function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -128,7 +130,7 @@ d3.select(window).on("resize", function () {
     d3.selectAll("svg>text")
         .style("font-size", newFontSize)
 });
-read_data("/home/sandor/.local/share/WinTrak/data.csv")
+read_data(`${query_params.get("home_dir")}/.local/share/WinTrak/data.csv`)
     .then(dsv => calc_data(dsv))
     .then(res => {
         dsv = res.dsv;

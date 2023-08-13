@@ -1,6 +1,7 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
 const fs = require("fs");
+const os = require('os');
 const initPath = path.join(app.getPath('userData'), "init.json");
 
 function createWindow() {
@@ -23,13 +24,15 @@ function createWindow() {
     x: x,
     y: y,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
     }
   })
   win.removeMenu()
   win.title = "WinTrak"
   win.webContents.openDevTools()
-  win.loadFile('web/index.html')
+  win.loadFile('web/index.html', { query: { home_dir: os.homedir() } })
+  // win.loadURL('file://web/index.html?home_dir=' + encodeURIComponent(os.homedir()))
 
   win.on('close', () => {
     var data = {

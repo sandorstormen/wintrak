@@ -1,11 +1,11 @@
 {
-  "name": "gui",
+  "name": "wintrak",
   "version": "1.0.0",
   "description": "GUI for WinTrak",
   "main": "main.js",
   "author": "Sandor Berglund",
   "license": "MIT",
-  "private": null,
+  "private": true,
   "devDependencies": {
     "electron": "^25.3.1"
   },
