@@ -8,7 +8,7 @@
 
 # Maintainer: Sandor Berglund <sandor.berglund@gmail.com>
 pkgname=wintrak-git # '-bzr', '-git', '-hg' or '-svn'
-pkgver=r13.30983f9
+pkgver=r14.ea7a604
 pkgrel=1
 _desc="The real time tracker"
 pkgdesc="The real time tracker"
@@ -69,9 +69,9 @@ build() {
 # }
 
 package() {
-	cd wintrak
+	cd "${pkgname%-git}"
 	# cd "$srcdir"
 	install -dm755 "$pkgdir/usr/lib/wintrak"
-	install -dm755 "$srcdir/backend/wintrak" "$pkgdir/usr/lib/wintrak"
-	# install -m644 "$srcdir/backend/wintrak.service" "$pkgdir/etc/systemd/user"
+	install -dm755 "./backend/wintrak" "$pkgdir/usr/lib/wintrak"
+	install -m644 "./backend/wintrak.service" "$pkgdir/etc/systemd/user"
 }
