@@ -5,8 +5,9 @@ Conflicts=getty@tty1.service
  
 [Service]
 Type=simple
-Environment="PYTHONPATH=$PYTHONPATH:/usr/lib/wintrak"
-ExecStart=/usr/bin/python3 -c "from wintrak import main; main.run()"
+# Environment="PYTHONPATH=$PYTHONPATH:/usr/lib/wintrak"
+WorkingDirectory=/usr/lib/wintrak
+ExecStart=/usr/bin/wintrak-backend.sh
 ExecStop=rm -r /usr/lib/wintrak/wintrak/__pycache__
 StandardInput=tty-force
  
