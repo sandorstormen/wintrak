@@ -38,7 +38,7 @@ class Receiver:
         self.exit_handler = signal(SIGINT, self.close)
 
     def __del__(self) -> None:
-        self.conn.close()
+        self.conn_pool.close()
 
     def accept(self) -> Any:
         if hasattr(self, "conn"):
